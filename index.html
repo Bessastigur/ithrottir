@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="1800">
+  <title>Íþróttaplan Fjölskyldunnar - Cozyla 32"</title>
+  <style>
+    :root {
+      --bg-color: #F8F9FA;
+      --card-bg: #FFFFFF;
+      --text-main: #202124;
+      --text-muted: #5F6368;
+      --border-color: #E0E0E0;
+      
+      /* Blár þema (Línur 1, 3, 5, 7) */
+      --blue-main: #1A73E8;
+      --blue-bg: #EEF4FE;
+      --blue-border: #C2E7FF;
+      --blue-badge: #174EA6;
+
+      /* Grænn þema (Línur 2, 4, 6) */
+      --green-main: #1E8E3E;
+      --green-bg: #E6F4EA;
+      --green-border: #CEEAD6;
+      --green-badge: #137333;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      padding: 16px 24px;
+      min-height: 100vh;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      background: var(--card-bg);
+      padding: 14px 24px;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      border: 1px solid var(--border-color);
+    }
+
+    .title-group h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--blue-main);
+      letter-spacing: -0.5px;
+    }
+
+    .title-group p {
+      font-size: 14.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      font-weight: 500;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .link-btn {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-color);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--blue-main);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .link-btn:hover {
+      background: var(--blue-bg);
+      border-color: var(--blue-main);
+    }
+
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+    }
+
+    .filter-btn {
+      background: #F1F3F4;
+      border: 1px solid transparent;
+      padding: 9px 18px;
+      border-radius: 20px;
+      font-size: 14.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover {
+      background: #E8EAED;
+      color: var(--text-main);
+    }
+
+    .filter-btn.active {
+      background: var(--blue-main);
+      color: #FFFFFF;
+      box-shadow: 0 2px 8px rgba(26, 115, 232, 0.3);
+    }
+
+    .table-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .table-header {
+      display: grid;
+      grid-template-columns: 210px 1.1fr 1.6fr 1.3fr;
+      padding: 0 20px 4px 20px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .child-row {
+      display: grid;
+      grid-template-columns: 210px 1.1fr 1.6fr 1.3fr;
+      background: var(--card-bg);
+      border-radius: 14px;
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      overflow: hidden;
+      min-height: 80px;
+      align-items: stretch;
+    }
+
+    .child-row.theme-blue {
+      border-left: 8px solid var(--blue-main);
+    }
+    .child-row.theme-green {
+      border-left: 8px solid var(--green-main);
+    }
+
+    .child-cell {
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+    }
+
+    .child-name-cell {
+      gap: 14px;
+      border-right: 1px solid var(--border-color);
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .theme-blue .avatar {
+      background: var(--blue-bg);
+      color: var(--blue-main);
+    }
+
+    .theme-green .avatar {
+      background: var(--green-bg);
+      color: var(--green-main);
+    }
+
+    .child-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .content-cell {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      padding: 10px 16px;
+    }
+
+    .school-cell {
+      border-right: 1px solid var(--border-color);
+      background: #FAFAFA;
+    }
+
+    .after-cell {
+      border-right: 1px solid var(--border-color);
+    }
+
+    .notes-cell {
+      background: #FCFCFD;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 4px;
+      padding: 10px 18px;
+    }
+
+    .event-chip {
+      padding: 6px 11px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.3;
+      border: 1px solid transparent;
+      display: inline-flex;
+      flex-direction: column;
+    }
+
+    .event-chip .time {
+      font-weight: 700;
+      font-size: 11.5px;
+      opacity: 0.85;
+    }
+
+    .event-chip .name {
+      font-weight: 600;
+      font-size: 13.5px;
+    }
+
+    .theme-blue .event-chip {
+      background: var(--blue-bg);
+      color: var(--blue-badge);
+      border-color: var(--blue-border);
+    }
+
+    .theme-green .event-chip {
+      background: var(--green-bg);
+      color: var(--green-badge);
+      border-color: var(--green-border);
+    }
+
+    .note-pill {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #3C4043;
+      background: #F1F3F4;
+      padding: 4px 10px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .note-pill.gear-pill {
+      background: #FFF8E1;
+      color: #795548;
+      border: 1px solid #FFE082;
+    }
+
+    .empty-state {
+      color: #9AA0A6;
+      font-size: 13.5px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="title-group">
+      <h1>Íþróttir og æfingar</h1>
+      <p id="current-date-txt">Yfirlit á 32" Cozyla</p>
+    </div>
+    <div class="nav-actions">
+      <a href="skoli.html" class="link-btn">📚 Stundatöflur</a>
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="setFilter('today')">Í dag</button>
+        <button class="filter-btn" onclick="setFilter('mon')">Mán</button>
+        <button class="filter-btn" onclick="setFilter('tue')">Þri</button>
+        <button class="filter-btn" onclick="setFilter('wed')">Mið</button>
+        <button class="filter-btn" onclick="setFilter('thu')">Fim</button>
+        <button class="filter-btn" onclick="setFilter('fri')">Fös</button>
+        <button class="filter-btn" onclick="setFilter('sat')">Lau</button>
+        <button class="filter-btn" onclick="setFilter('all')">Öll vikan</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="table-header">
+    <div>Barn</div>
+    <div>Í skóla</div>
+    <div>Eftir skóla</div>
+    <div>Minnisatriði / Búnaður</div>
+  </div>
+
+  <div class="table-container" id="schedule-container"></div>
+
+  <script>
+    function getGearRequirements(events) {
+      const items = new Set();
+      events.forEach(e => {
+        const titleLower = e.title.toLowerCase();
+        if (titleLower.includes("fótbolti")) {
+          items.add("Íþróttaföt og takkaskór");
+        } else if (titleLower.includes("sund")) {
+          items.add("Sundföt, handklæði og sundgleraugu");
+        } else if (titleLower.includes("íþróttir") || titleLower.includes("leikfimi")) {
+          items.add("Íþróttaföt og íþróttaskór");
+        }
+      });
+      return Array.from(items);
+    }
+
+    const childrenData = [
+      {
+        name: "Ísalind",
+        initials: "Í",
+        theme: "blue",
+        school: [
+          { day: "tue", time: "13:10-13:50", title: "Sund" },
+          { day: "wed", time: "10:40-11:20", title: "Íþróttir" },
+          { day: "fri", time: "11:20-12:00", title: "Íþróttir" }
+        ],
+        afterSchool: [
+          { day: "mon", time: "16:15-17:30", title: "Sund" },
+          { day: "tue", time: "17:00-18:45", title: "Sund" },
+          { day: "wed", time: "16:15-17:45", title: "Sund" },
+          { day: "thu", time: "16:45-18:15", title: "Sund" }
+        ]
+      },
+      {
+        name: "Ilse",
+        initials: "I",
+        theme: "green",
+        school: [
+          { day: "mon", time: "11:20-12:00", title: "Sund" },
+          { day: "tue", time: "11:20-12:00", title: "Íþróttir" },
+          { day: "wed", time: "08:20-09:00", title: "Íþróttir" }
+        ],
+        afterSchool: [
+          { day: "mon", time: "14:45-15:45", title: "Handbolti" },
+          { day: "mon", time: "16:30-17:30", title: "Fótbolti" },
+          { day: "tue", time: "15:15-16:15", title: "Fótbolti" },
+          { day: "wed", time: "15:15-16:15", title: "Handbolti" },
+          { day: "thu", time: "15:00-16:00", title: "Handbolti" },
+          { day: "fri", time: "14:30-15:30", title: "Fótbolti" }
+        ]
+      },
+      {
+        name: "Oktavíus",
+        initials: "O",
+        theme: "blue",
+        school: [
+          { day: "tue", time: "08:20-09:00", title: "Leikfimi" },
+          { day: "wed", time: "09:00-09:40", title: "Leikfimi" },
+          { day: "thu", time: "08:20-09:00", title: "Sund" }
+        ],
+        afterSchool: [
+          { day: "tue", time: "16:15-17:00", title: "Sund" },
+          { day: "thu", time: "16:00-16:45", title: "Sund" },
+          { day: "fri", time: "15:00-15:45", title: "Sund" },
+          { day: "sat", time: "11:30-12:30", title: "Skák" }
+        ]
+      },
+      {
+        name: "Ísis Binna",
+        initials: "ÍB",
+        theme: "green",
+        school: [
+          { day: "mon", time: "08:20-09:00", title: "Íþróttir" },
+          { day: "tue", time: "10:20-11:00", title: "Sund" },
+          { day: "fri", time: "08:20-09:00", title: "Íþróttir" }
+        ],
+        afterSchool: [
+          { day: "mon", time: "14:00-15:00", title: "Handbolti" },
+          { day: "tue", time: "14:00-15:00", title: "Fótbolti" },
+          { day: "tue", time: "15:15-16:15", title: "Handbolti" },
+          { day: "wed", time: "14:30-15:30", title: "Fótbolti" },
+          { day: "thu", time: "14:00-15:00", title: "Fótbolti" },
+          { day: "fri", time: "14:00-15:00", title: "Handbolti" }
+        ]
+      },
+      {
+        name: "Tíberíus",
+        initials: "T",
+        theme: "blue",
+        school: [
+          { day: "mon", time: "09:00-09:40", title: "Íþróttir" },
+          { day: "tue", time: "09:00-09:40", title: "Íþróttir" },
+          { day: "thu", time: "09:00-09:40", title: "Sund" }
+        ],
+        afterSchool: [
+          { day: "mon", time: "14:30-15:30", title: "Fótbolti" },
+          { day: "tue", time: "14:15-15:15", title: "Handbolti" },
+          { day: "tue", time: "15:30-16:15", title: "Sund" },
+          { day: "wed", time: "14:30-15:30", title: "Fótbolti" },
+          { day: "thu", time: "14:00-15:00", title: "Handbolti" },
+          { day: "thu", time: "15:15-16:00", title: "Sund" },
+          { day: "fri", time: "13:15-14:15", title: "Fótbolti" },
+          { day: "sat", time: "10:30-11:30", title: "Skákæfing" },
+          { day: "sat", time: "11:00-12:00", title: "Handbolti" }
+        ]
+      },
+      {
+        name: "Lúðvík Hafsteinn",
+        initials: "LH",
+        theme: "green",
+        school: [
+          { day: "mon", time: "09:00-09:40", title: "Íþróttir" },
+          { day: "tue", time: "09:00-09:40", title: "Íþróttir" },
+          { day: "wed", time: "09:00", title: "Talkennsla" },
+          { day: "thu", time: "09:00-09:40", title: "Sund" }
+        ],
+        afterSchool: [
+          { day: "tue", time: "15:30-16:15", title: "Sund" },
+          { day: "thu", time: "15:15-16:00", title: "Sund" },
+          { day: "sat", time: "10:30-11:30", title: "Skákæfing" }
+        ]
+      },
+      {
+        name: "Marín Rós",
+        initials: "MR",
+        theme: "blue",
+        school: [],
+        afterSchool: []
+      }
+    ];
+
+    const dayMap = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+    const dayNamesIs = {
+      mon: "Mánudagur",
+      tue: "Þriðjudagur",
+      wed: "Miðvikudagur",
+      thu: "Fimmtudagur",
+      fri: "Föstudagur",
+      sat: "Laugardagur",
+      sun: "Sunnudagur"
+    };
+
+    let activeFilter = 'today';
+
+    function getTodayKey() {
+      const dayIdx = new Date().getDay();
+      return dayMap[dayIdx];
+    }
+
+    function renderSchedule() {
+      const container = document.getElementById("schedule-container");
+      container.innerHTML = "";
+
+      const currentDayKey = activeFilter === 'today' ? getTodayKey() : activeFilter;
+
+      const dateTxt = document.getElementById("current-date-txt");
+      if (activeFilter === 'today') {
+        dateTxt.textContent = `Í dag (${dayNamesIs[currentDayKey] || 'Helgi'})`;
+      } else if (activeFilter === 'all') {
+        dateTxt.textContent = "Öll vikan í heild";
+      } else {
+        dateTxt.textContent = `${dayNamesIs[activeFilter]}`;
+      }
+
+      childrenData.forEach(child => {
+        const schoolEvents = child.school.filter(e => activeFilter === 'all' || e.day === currentDayKey);
+        const afterEvents = child.afterSchool.filter(e => activeFilter === 'all' || e.day === currentDayKey);
+        const allEvents = [...schoolEvents, ...afterEvents];
+
+        const row = document.createElement("div");
+        row.className = `child-row theme-${child.theme}`;
+
+        const nameCol = document.createElement("div");
+        nameCol.className = "child-cell child-name-cell";
+        nameCol.innerHTML = `
+          <div class="avatar">${child.initials}</div>
+          <div class="child-name">${child.name}</div>
+        `;
+
+        const schoolCol = document.createElement("div");
+        schoolCol.className = "child-cell content-cell school-cell";
+        if (schoolEvents.length > 0) {
+          schoolEvents.forEach(e => {
+            const prefix = activeFilter === 'all' ? `${dayNamesIs[e.day].slice(0,3)} ` : '';
+            schoolCol.innerHTML += `
+              <div class="event-chip">
+                <span class="time">${prefix}${e.time}</span>
+                <span class="name">${e.title}</span>
+              </div>
+            `;
+          });
+        } else {
+          schoolCol.innerHTML = `<span class="empty-state">Engir tímar</span>`;
+        }
+
+        const afterCol = document.createElement("div");
+        afterCol.className = "child-cell content-cell after-cell";
+        if (afterEvents.length > 0) {
+          afterEvents.forEach(e => {
+            const prefix = activeFilter === 'all' ? `${dayNamesIs[e.day].slice(0,3)} ` : '';
+            afterCol.innerHTML += `
+              <div class="event-chip">
+                <span class="time">${prefix}${e.time}</span>
+                <span class="name">${e.title}</span>
+              </div>
+            `;
+          });
+        } else {
+          afterCol.innerHTML = `<span class="empty-state">Engar æfingar</span>`;
+        }
+
+        const notesCol = document.createElement("div");
+        notesCol.className = "child-cell notes-cell";
+        const gearList = getGearRequirements(allEvents);
+        
+        if (gearList.length > 0) {
+          gearList.forEach(gear => {
+            notesCol.innerHTML += `<div class="note-pill gear-pill">🎒 ${gear}</div>`;
+          });
+        } else {
+          notesCol.innerHTML = `<span class="empty-state">Ekkert sérstakt</span>`;
+        }
+
+        row.appendChild(nameCol);
+        row.appendChild(schoolCol);
+        row.appendChild(afterCol);
+        notesCol.style.borderRight = "none";
+        row.appendChild(notesCol);
+        container.appendChild(row);
+      });
+    }
+
+    function setFilter(filter) {
+      activeFilter = filter;
+      document.querySelectorAll(".filter-btn").forEach(btn => {
+        btn.classList.remove("active");
+        if (btn.getAttribute("onclick").includes(`'${filter}'`)) {
+          btn.classList.add("active");
+        }
+      });
+      renderSchedule();
+    }
+
+    renderSchedule();
+  </script>
+</body>
+</html>

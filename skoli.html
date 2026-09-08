@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="1800">
+  <title>Stundatöflur Krakkanna - Cozyla 32"</title>
+  <style>
+    :root {
+      --bg-color: #F8F9FA;
+      --card-bg: #FFFFFF;
+      --text-main: #202124;
+      --text-muted: #5F6368;
+      --border-color: #E0E0E0;
+
+      /* Blár þema (Línur 1, 3, 5) */
+      --blue-main: #1A73E8;
+      --blue-bg: #EEF4FE;
+      --blue-border: #C2E7FF;
+      --blue-badge: #174EA6;
+
+      /* Grænn þema (Línur 2, 4) */
+      --green-main: #1E8E3E;
+      --green-bg: #E6F4EA;
+      --green-border: #CEEAD6;
+      --green-badge: #137333;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      padding: 16px 24px;
+      min-height: 100vh;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      background: var(--card-bg);
+      padding: 14px 24px;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      border: 1px solid var(--border-color);
+    }
+
+    .title-group h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--blue-main);
+      letter-spacing: -0.5px;
+    }
+
+    .title-group p {
+      font-size: 14.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      font-weight: 500;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .link-btn {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-color);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--blue-main);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .link-btn:hover {
+      background: var(--blue-bg);
+      border-color: var(--blue-main);
+    }
+
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+    }
+
+    .filter-btn {
+      background: #F1F3F4;
+      border: 1px solid transparent;
+      padding: 9px 18px;
+      border-radius: 20px;
+      font-size: 14.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover {
+      background: #E8EAED;
+      color: var(--text-main);
+    }
+
+    .filter-btn.active {
+      background: var(--blue-main);
+      color: #FFFFFF;
+      box-shadow: 0 2px 8px rgba(26, 115, 232, 0.3);
+    }
+
+    .table-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .table-header {
+      display: grid;
+      grid-template-columns: 240px 170px 1.2fr 1fr;
+      padding: 0 20px 4px 20px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .child-row {
+      display: grid;
+      grid-template-columns: 240px 170px 1.2fr 1fr;
+      background: var(--card-bg);
+      border-radius: 14px;
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      overflow: hidden;
+      min-height: 86px;
+      align-items: stretch;
+    }
+
+    .child-row.theme-blue {
+      border-left: 8px solid var(--blue-main);
+    }
+
+    .child-row.theme-green {
+      border-left: 8px solid var(--green-main);
+    }
+
+    .child-cell {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+    }
+
+    .child-name-cell {
+      gap: 12px;
+      border-right: 1px solid var(--border-color);
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .theme-blue .avatar {
+      background: var(--blue-bg);
+      color: var(--blue-main);
+    }
+
+    .theme-green .avatar {
+      background: var(--green-bg);
+      color: var(--green-main);
+    }
+
+    .name-details h3 {
+      font-size: 17.5px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .name-details span {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .hours-cell {
+      border-right: 1px solid var(--border-color);
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 4px;
+      background: #FAFAFA;
+    }
+
+    .hours-badge {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .end-badge {
+      font-size: 12px;
+      font-weight: 600;
+      color: #D93025;
+      background: #FCE8E6;
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+
+    .content-cell {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      align-items: center;
+      padding: 10px 14px;
+      border-right: 1px solid var(--border-color);
+    }
+
+    .afternoon-cell {
+      border-right: none;
+      background: #FCFCFD;
+    }
+
+    .slot-chip {
+      padding: 5px 9px;
+      border-radius: 7px;
+      font-size: 12.5px;
+      line-height: 1.25;
+      border: 1px solid transparent;
+      display: inline-flex;
+      flex-direction: column;
+    }
+
+    .slot-chip .time {
+      font-weight: 700;
+      font-size: 11px;
+      opacity: 0.85;
+    }
+
+    .slot-chip .name {
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .theme-blue .slot-chip {
+      background: var(--blue-bg);
+      color: var(--blue-badge);
+      border-color: var(--blue-border);
+    }
+
+    .theme-green .slot-chip {
+      background: var(--green-bg);
+      color: var(--green-badge);
+      border-color: var(--green-border);
+    }
+
+    .slot-chip.highlight-special {
+      background: #FFF8E1;
+      color: #795548;
+      border-color: #FFE082;
+    }
+
+    .empty-state {
+      color: #9AA0A6;
+      font-size: 13px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="title-group">
+      <h1>Stundatöflur í skóla</h1>
+      <p id="current-date-txt">Yfirlit á 32" Cozyla</p>
+    </div>
+    <div class="nav-actions">
+      <a href="index.html" class="link-btn">⚽ Íþróttatafla</a>
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="setFilter('today')">Í dag</button>
+        <button class="filter-btn" onclick="setFilter('mon')">Mán</button>
+        <button class="filter-btn" onclick="setFilter('tue')">Þri</button>
+        <button class="filter-btn" onclick="setFilter('wed')">Mið</button>
+        <button class="filter-btn" onclick="setFilter('thu')">Fim</button>
+        <button class="filter-btn" onclick="setFilter('fri')">Fös</button>
+        <button class="filter-btn" onclick="setFilter('all')">Öll vikan</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="table-header">
+    <div>Barn & Bekkur</div>
+    <div>Skólatími</div>
+    <div>Fyrir hádegi</div>
+    <div>Eftir hádegi</div>
+  </div>
+
+  <div class="table-container" id="schedule-container"></div>
+
+  <script>
+    const schoolData = [
+      {
+        name: "Ísalind",
+        grade: "8. bekkur (8. BÓB)",
+        initials: "Í",
+        theme: "blue",
+        schedule: {
+          mon: {
+            hours: "08:20 – 15:50",
+            end: "Lýkur 15:50",
+            morning: [
+              { time: "08:20–09:20", title: "Enska" },
+              { time: "09:20–10:20", title: "Íslenska" },
+              { time: "10:40–11:40", title: "Stærðfræði" },
+              { time: "11:40–12:40", title: "Náttúrufræði" }
+            ],
+            afternoon: [
+              { time: "12:40–13:10", title: "Matur" },
+              { time: "13:10–14:10", title: "Samfélagsgreinar" },
+              { time: "14:10–15:50", title: "Myndmennt (H-1)" }
+            ]
+          },
+          tue: {
+            hours: "08:20 – 15:10",
+            end: "Lýkur 15:10",
+            morning: [
+              { time: "08:20–09:20", title: "Danska" },
+              { time: "09:20–10:20", title: "Stærðfræði" },
+              { time: "10:40–11:40", title: "Enska" },
+              { time: "11:40–12:40", title: "Íslenska" }
+            ],
+            afternoon: [
+              { time: "12:40–13:10", title: "Matur" },
+              { time: "13:10–13:50", title: "Sund" },
+              { time: "14:10–15:10", title: "Líkamsrækt" }
+            ]
+          },
+          wed: {
+            hours: "08:20 – 14:10",
+            end: "Lýkur 14:10",
+            morning: [
+              { time: "08:20–09:20", title: "Íslenska" },
+              { time: "09:20–10:20", title: "Stærðfræði" },
+              { time: "10:40–11:20", title: "Íþróttir" },
+              { time: "11:40–12:20", title: "Samfélagsgreinar" }
+            ],
+            afternoon: [
+              { time: "12:20–13:10", title: "Matur / Samfélagsgr." },
+              { time: "13:10–13:50", title: "Tæknimennt" },
+              { time: "13:50–14:10", title: "Bekkjarfundur" }
+            ]
+          },
+          thu: {
+            hours: "08:20 – 13:10",
+            end: "Lýkur 13:10",
+            morning: [
+              { time: "08:20–09:20", title: "Náttúrufræði" },
+              { time: "09:20–10:20", title: "Danska" },
+              { time: "10:40–11:20", title: "Enska" },
+              { time: "11:20–12:40", title: "Vísindasmiðjan" }
+            ],
+            afternoon: [
+              { time: "12:40–13:10", title: "Matur" }
+            ]
+          },
+          fri: {
+            hours: "08:20 – 12:20",
+            end: "Lýkur 12:20",
+            morning: [
+              { time: "08:20–09:20", title: "Íslenska" },
+              { time: "09:20–10:20", title: "Stærðfræði" },
+              { time: "10:40–11:20", title: "Bekkjarfundur" },
+              { time: "11:20–12:00", title: "Íþróttir" },
+              { time: "12:00–12:20", title: "Matur" }
+            ],
+            afternoon: []
+          }
+        }
+      },
+      {
+        name: "Ilse",
+        grade: "6. bekkur",
+        initials: "I",
+        theme: "green",
+        schedule: {
+          mon: {
+            hours: "08:20 – 14:10",
+            end: "Lýkur 14:10",
+            morning: [
+              { time: "08:20–09:40", title: "Lotur" },
+              { time: "10:20–11:20", title: "Stærðfræði" },
+              { time: "11:20–12:00", title: "Sund" }
+            ],
+            afternoon: [
+              { time: "12:10–12:40", title: "Matur" },
+              { time: "12:40–13:20", title: "Þjálfunartími" },
+              { time: "13:20–14:10", title: "Ástríðutími" }
+            ]
+          },
+          tue: {
+            hours: "08:20 – 14:10",
+            end: "Lýkur 14:10",
+            morning: [
+              { time: "08:20–08:40", title: "Hreyfing" },
+              { time: "08:40–09:40", title: "Íslenska" },
+              { time: "10:20–11:20", title: "Enska" },
+              { time: "11:20–12:00", title: "Íþróttir" }
+            ],
+            afternoon: [
+              { time: "12:10–12:40", title: "Matur" },
+              { time: "12:40–13:20", title: "Þjálfunartími" },
+              { time: "13:20–14:10", title: "Ástríðutími" }
+            ]
+          },
+          wed: {
+            hours: "08:20 – 14:30",
+            end: "Lýkur 14:30",
+            morning: [
+              { time: "08:20–09:00", title: "Íþróttir" },
+              { time: "09:00–09:40", title: "Lesskilningur" },
+              { time: "10:20–11:00", title: "Stærðfræði" },
+              { time: "11:00–12:10", title: "Náttúrufræði" }
+            ],
+            afternoon: [
+              { time: "12:10–12:40", title: "Matur" },
+              { time: "12:40–13:10", title: "Þjálfunartími" },
+              { time: "13:10–14:30", title: "Lotur" }
+            ]
+          },
+          thu: {
+            hours: "08:20 – 14:10",
+            end: "Lýkur 14:10",
+            morning: [
+              { time: "08:20–08:40", title: "Hreyfing" },
+              { time: "08:40–09:40", title: "Stærðfræði" },
+              { time: "10:20–12:10", title: "Enska/Danska/Samf." }
+            ],
+            afternoon: [
+              { time: "12:10–12:40", title: "Matur" },
+              { time: "12:40–13:20", title: "Þjálfunartími" },
+              { time: "13:20–14:10", title: "Ástríðutími" }
+            ]
+          },
+          fri: {
+            hours: "08:20 – 12:20",
+            end: "Lýkur 12:20",
+            morning: [
+              { time: "08:20–09:40", title: "Lotur" },
+              { time: "10:40–11:20", title: "Íslenska" },
+              { time: "11:20–12:20", title: "Samfélagsfræði" }
+            ],
+            afternoon: [
+              { time: "12:20", title: "Matur (Skólaslit)" }
+            ]
+          }
+        }
+      },
+      {
+        name: "Oktavíus",
+        grade: "5. bekkur (5. SAA)",
+        initials: "O",
+        theme: "blue",
+        schedule: {
+          mon: {
+            hours: "08:20 – 14:30",
+            end: "Lýkur 14:30",
+            morning: [
+              { time: "08:20–08:40", title: "Hreyfing" },
+              { time: "08:40–09:40", title: "Íslenska" },
+              { time: "10:00–10:40", title: "Samfélagsfræði" },
+              { time: "10:40–11:20", title: "Enska" },
+              { time: "11:20–12:00", title: "Náttúrufræði" }
+            ],
+            afternoon: [
+              { time: "12:00–12:30", title: "Matur" },
+              { time: "12:30–13:10", title: "Þjálfun Stærðfræði" },
+              { time: "13:10–14:30", title: "Lotur" }
+            ]
+          },
+          tue: {
+            hours: "08:20 – 14:10",
+            end: "Lýkur 14:10",
+            morning: [
+              { time: "08:20–08:40", title: "Íþróttir" },
+              { time: "08:40–09:40", title: "Lesskilningur" },
+              { time: "10:00–10:40", title: "Stærðfræði" },
+              { time: "10:40–12:00", title: "Lotur" }
+            ],
+            afternoon: [
+              { time: "12:00–12:30", title: "Matur" },
+              { time: "12:30–13:10", title: "Þjálfun Íslenska" },
+              { time: "13:10–14:10", title: "Ástríða" }
+            ]
+          },
+          wed: {
+            hours: "08:20 – 14:10",
+            end: "Lýkur 14:10",
+            morning: [
+              { time: "08:20–08:40", title: "Stærðfræði" },
+              { time: "08:40–09:40", title: "Íþróttir" },
+              { time: "10:00–11:20", title: "Hringekja" },
+              { time: "11:20–12:00", title: "Náttúrufræði" }
+            ],
+            afternoon: [
+              { time: "12:00–12:30", title: "Matur" },
+              { time: "12:30–13:10", title: "Þjálfun Íslenska" },
+              { time: "13:10–14:10", title: "Ástríða" }
+            ]
+          },
+          thu: {
+            hours: "08:20 – 14:10",
+            end: "Lýkur 14:10",
+            morning: [
+              { time: "08:20–08:40", title: "Sund" },
+              { time: "08:40–09:40", title: "Lesskilningur" },
+              { time: "10:00–10:40", title: "Enska" },
+              { time: "10:40–11:20", title: "Íslenska" },
+              { time: "11:20–12:00", title: "Náttúrufræði" }
+            ],
+            afternoon: [
+              { time: "12:00–12:30", title: "Matur" },
+              { time: "12:30–13:10", title: "Þjálfun Stærðfræði" },
+              { time: "13:10–14:10", title: "Ástríða" }
+            ]
+          },
+          fri: {
+            hours: "08:20 – 13:10",
+            end: "Lýkur 13:10",
+            morning: [
+              { time: "08:20–08:40", title: "Hreyfing" },
+              { time: "08:40–09:40", title: "Stærðfræði" },
+              { time: "10:00–11:20", title: "Lotur" },
+              { time: "11:20–12:00", title: "Samfélagsfræði" }
+            ],
+            afternoon: [
+              { time: "12:00–12:30", title: "Matur" },
+              { time: "12:30–13:10", title: "Heimferð / Frjálst" }
+            ]
+          }
+        }
+      },
+      {
+        name: "Ísis Binna",
+        grade: "3. bekkur (3. ALS)",
+        initials: "ÍB",
+        theme: "green",
+        schedule: {
+          mon: {
+            hours: "08:20 – 13:20",
+            end: "Lýkur 13:20",
+            morning: [
+              { time: "08:20–09:00", title: "Íþróttir" },
+              { time: "09:20–10:00", title: "Bekkur / Nesti" },
+              { time: "10:00–11:00", title: "Lotur" },
+              { time: "11:00–11:40", title: "Bekkur" }
+            ],
+            afternoon: [
+              { time: "11:40–12:20", title: "Matur & Frímó" },
+              { time: "12:20–13:00", title: "Þjálfunartími" },
+              { time: "13:00–13:20", title: "Bekkur" }
+            ]
+          },
+          tue: {
+            hours: "08:20 – 13:50",
+            end: "Lýkur 13:50",
+            morning: [
+              { time: "08:20–09:40", title: "Bekkur" },
+              { time: "10:20–11:20", title: "Sund" }
+            ],
+            afternoon: [
+              { time: "11:40–12:20", title: "Matur & Frímó" },
+              { time: "12:20–13:00", title: "Þjálfunartími" },
+              { time: "13:00–13:50", title: "Ástríðutími" }
+            ]
+          },
+          wed: {
+            hours: "08:20 – 13:00",
+            end: "Lýkur 13:00",
+            morning: [
+              { time: "08:20–10:00", title: "Dans / Bekkur" },
+              { time: "10:20–11:00", title: "Dans / Bekkur" },
+              { time: "11:00–11:40", title: "Bekkur" }
+            ],
+            afternoon: [
+              { time: "11:40–12:00", title: "Matur" },
+              { time: "12:00–13:00", title: "Lotur" }
+            ]
+          },
+          thu: {
+            hours: "08:20 – 13:50",
+            end: "Lýkur 13:50",
+            morning: [
+              { time: "08:20–09:20", title: "Bekkur" },
+              { time: "09:40–10:40", title: "Flækja" },
+              { time: "10:40–11:00", title: "Hreyfing" },
+              { time: "11:00–11:40", title: "Flækja" }
+            ],
+            afternoon: [
+              { time: "11:40–12:20", title: "Matur & Frímó" },
+              { time: "12:20–13:00", title: "Þjálfunartími" },
+              { time: "13:00–13:50", title: "Ástríðutími" }
+            ]
+          },
+          fri: {
+            hours: "08:20 – 12:40",
+            end: "Lýkur 12:40",
+            morning: [
+              { time: "08:20–09:00", title: "Íþróttir" },
+              { time: "09:40–10:40", title: "Lotur" },
+              { time: "10:40–11:00", title: "Hreyfing" },
+              { time: "11:00–11:40", title: "Bekkur" }
+            ],
+            afternoon: [
+              { time: "11:40–12:20", title: "Þjálfunartími" },
+              { time: "12:20–12:40", title: "Söngur / Bekkur" }
+            ]
+          }
+        }
+      },
+      {
+        name: "Tíberíus & Lúðvík Hafsteinn",
+        grade: "1. bekkur (1. KM)",
+        initials: "T+L",
+        theme: "blue",
+        schedule: {
+          mon: {
+            hours: "08:20 – 13:40",
+            end: "Lýkur 13:40",
+            morning: [
+              { time: "08:20–09:00", title: "Bekkur" },
+              { time: "09:00–09:40", title: "Íþróttir" },
+              { time: "10:00–11:20", title: "Bekkur (Nesti kl. 10)" },
+              { time: "11:20–12:00", title: "Þjálfun" }
+            ],
+            afternoon: [
+              { time: "12:00–12:40", title: "Matur & Frímó" },
+              { time: "12:40–13:40", title: "Ástríða" }
+            ]
+          },
+          tue: {
+            hours: "08:20 – 13:40",
+            end: "Lýkur 13:40",
+            morning: [
+              { time: "08:20–09:00", title: "Bekkur" },
+              { time: "09:00–09:40", title: "Íþróttir" },
+              { time: "10:00–12:00", title: "Bekkur (Nesti kl. 10)" }
+            ],
+            afternoon: [
+              { time: "12:00–12:40", title: "Matur & Frímó" },
+              { time: "12:40–13:40", title: "Ástríða" }
+            ]
+          },
+          wed: {
+            hours: "08:20 – 13:40",
+            end: "Lýkur 13:40",
+            morning: [
+              { time: "08:20–09:40", title: "Bekkur (Lúðvík Talkennsla 09:00)", special: true },
+              { time: "10:00–11:20", title: "Bekkur (Nesti kl. 10)" },
+              { time: "11:20–12:00", title: "Þjálfun" }
+            ],
+            afternoon: [
+              { time: "12:00–12:40", title: "Matur & Frímó" },
+              { time: "12:40–13:40", title: "Bekkur" }
+            ]
+          },
+          thu: {
+            hours: "08:20 – 13:40",
+            end: "Lýkur 13:40",
+            morning: [
+              { time: "08:20–09:00", title: "Bekkur" },
+              { time: "09:00–09:40", title: "Sund" },
+              { time: "10:00–10:40", title: "Bekkur (Nesti kl. 10)" },
+              { time: "10:40–11:20", title: "Þjálfun" },
+              { time: "11:20–12:00", title: "Bekkur" }
+            ],
+            afternoon: [
+              { time: "12:00–12:40", title: "Matur & Frímó" },
+              { time: "12:40–13:40", title: "Ástríða" }
+            ]
+          },
+          fri: {
+            hours: "08:20 – 12:00",
+            end: "Lýkur 12:00",
+            morning: [
+              { time: "08:20–09:00", title: "Dans" },
+              { time: "09:00–09:40", title: "Bekkur" },
+              { time: "10:00–10:40", title: "Bekkur" },
+              { time: "10:40–11:20", title: "Þjálfun" },
+              { time: "11:20–12:00", title: "Söngur" }
+            ],
+            afternoon: [
+              { time: "12:00", title: "Matur (Skólaslit)" }
+            ]
+          }
+        }
+      }
+    ];
+
+    const dayMap = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+    const dayNamesIs = {
+      mon: "Mánudagur",
+      tue: "Þriðjudagur",
+      wed: "Miðvikudagur",
+      thu: "Fimmtudagur",
+      fri: "Föstudagur",
+      sat: "Laugardagur",
+      sun: "Sunnudagur"
+    };
+
+    let activeFilter = 'today';
+
+    function getTodayKey() {
+      const dayIdx = new Date().getDay();
+      const key = dayMap[dayIdx];
+      return (key === "sat" || key === "sun") ? "mon" : key;
+    }
+
+    function renderSchedule() {
+      const container = document.getElementById("schedule-container");
+      container.innerHTML = "";
+
+      const currentDayKey = activeFilter === 'today' ? getTodayKey() : activeFilter;
+
+      const dateTxt = document.getElementById("current-date-txt");
+      if (activeFilter === 'today') {
+        const isWeekend = new Date().getDay() === 0 || new Date().getDay() === 6;
+        dateTxt.textContent = `Í dag (${dayNamesIs[currentDayKey]}${isWeekend ? ' - sýnir næsta skóladag' : ''})`;
+      } else if (activeFilter === 'all') {
+        dateTxt.textContent = "Öll skólavikan í heild";
+      } else {
+        dateTxt.textContent = `${dayNamesIs[activeFilter]}`;
+      }
+
+      schoolData.forEach(child => {
+        const row = document.createElement("div");
+        row.className = `child-row theme-${child.theme}`;
+
+        const nameCol = document.createElement("div");
+        nameCol.className = "child-cell child-name-cell";
+        nameCol.innerHTML = `
+          <div class="avatar">${child.initials}</div>
+          <div class="name-details">
+            <h3>${child.name}</h3>
+            <span>${child.grade}</span>
+          </div>
+        `;
+
+        const hoursCol = document.createElement("div");
+        hoursCol.className = "child-cell hours-cell";
+
+        const morningCol = document.createElement("div");
+        morningCol.className = "child-cell content-cell";
+
+        const afternoonCol = document.createElement("div");
+        afternoonCol.className = "child-cell content-cell afternoon-cell";
+
+        if (activeFilter === 'all') {
+          hoursCol.innerHTML = `<span class="hours-badge">08:20 – breytilegt</span><span class="end-badge">Mán – Fös</span>`;
+          
+          ["mon", "tue", "wed", "thu", "fri"].forEach(dKey => {
+            const dPlan = child.schedule[dKey];
+            if (dPlan) {
+              const dShort = dayNamesIs[dKey].slice(0,3);
+              dPlan.morning.forEach(s => {
+                morningCol.innerHTML += `
+                  <div class="slot-chip ${s.special ? 'highlight-special' : ''}">
+                    <span class="time">${dShort} ${s.time}</span>
+                    <span class="name">${s.title}</span>
+                  </div>
+                `;
+              });
+              dPlan.afternoon.forEach(s => {
+                afternoonCol.innerHTML += `
+                  <div class="slot-chip ${s.special ? 'highlight-special' : ''}">
+                    <span class="time">${dShort} ${s.time}</span>
+                    <span class="name">${s.title}</span>
+                  </div>
+                `;
+              });
+            }
+          });
+        } else {
+          const dayPlan = child.schedule[currentDayKey];
+          if (dayPlan) {
+            hoursCol.innerHTML = `
+              <span class="hours-badge">${dayPlan.hours}</span>
+              <span class="end-badge">${dayPlan.end}</span>
+            `;
+
+            if (dayPlan.morning.length > 0) {
+              dayPlan.morning.forEach(s => {
+                morningCol.innerHTML += `
+                  <div class="slot-chip ${s.special ? 'highlight-special' : ''}">
+                    <span class="time">${s.time}</span>
+                    <span class="name">${s.title}</span>
+                  </div>
+                `;
+              });
+            } else {
+              morningCol.innerHTML = `<span class="empty-state">Engir morguntímar</span>`;
+            }
+
+            if (dayPlan.afternoon.length > 0) {
+              dayPlan.afternoon.forEach(s => {
+                afternoonCol.innerHTML += `
+                  <div class="slot-chip ${s.special ? 'highlight-special' : ''}">
+                    <span class="time">${s.time}</span>
+                    <span class="name">${s.title}</span>
+                  </div>
+                `;
+              });
+            } else {
+              afternoonCol.innerHTML = `<span class="empty-state">Skóla lokið fyrir hádegi</span>`;
+            }
+          } else {
+            hoursCol.innerHTML = `<span class="empty-state">Enginn skóli</span>`;
+            morningCol.innerHTML = `<span class="empty-state">Engir tímar</span>`;
+            afternoonCol.innerHTML = `<span class="empty-state">Engir tímar</span>`;
+          }
+        }
+
+        row.appendChild(nameCol);
+        row.appendChild(hoursCol);
+        row.appendChild(morningCol);
+        row.appendChild(afternoonCol);
+        container.appendChild(row);
+      });
+    }
+
+    function setFilter(filter) {
+      activeFilter = filter;
+      document.querySelectorAll(".filter-btn").forEach(btn => {
+        btn.classList.remove("active");
+        if (btn.getAttribute("onclick").includes(`'${filter}'`)) {
+          btn.classList.add("active");
+        }
+      });
+      renderSchedule();
+    }
+
+    renderSchedule();
+  </script>
+</body>
+</html>
